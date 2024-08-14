@@ -34,6 +34,7 @@ class SAIGA_OPENGL_API VRRenderer : public DeferredRenderer
     virtual void render(const RenderInfo& renderInfo) override;
 
     OpenVRWrapper& VR() { return *vr; }
+    std::shared_ptr<OpenVRWrapper> VR_ptr() { return vr; }
 
    private:
     // for left and right eye

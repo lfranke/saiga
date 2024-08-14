@@ -76,9 +76,14 @@ if (SAIGA_WITH_OPENVR)
     ## OpenVR / steamVR
     find_package(OpenVR QUIET)
     PackageHelper(OpenVR ${OPENVR_FOUND} "${OPENVR_INCLUDE_DIRS}" "${OPENVR_LIBRARY}")
+    message(">>>>>>>>Saiga OPENVR")
     if (OPENVR_FOUND)
         set(SAIGA_VR 1)
+        message("Saiga OPENVR found")
+        message(${OPENVR_FOUND} "${OPENVR_INCLUDE_DIRS}" "${OPENVR_LIBRARY}")
+
     endif ()
+
 endif ()
 
 set(OPENGL_INCLUDES ${PACKAGE_INCLUDES})

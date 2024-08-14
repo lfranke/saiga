@@ -1,4 +1,3 @@
-
 # - try to find the OpenVR SDK - currently designed for the version on GitHub.
 #
 # Cache Variables: (probably not for direct use in your scripts)
@@ -20,16 +19,16 @@
 # http://www.boost.org/LICENSE_1_0.txt)
 
 set(OPENVR_ROOT_DIR
-    "${OPENVR_ROOT_DIR}"
-    CACHE
-    PATH
-    "Directory to search for OpenVR SDK")
+        "${OPENVR_ROOT_DIR}"
+        CACHE
+        PATH
+        "Directory to search for OpenVR SDK")
 
 set(OPENVR_HEADERS_ROOT_DIR
-    "${OPENVR_HEADERS_ROOT_DIR}"
-    CACHE
-    PATH
-    "Directory to search for private OpenVR headers")
+        "${OPENVR_HEADERS_ROOT_DIR}"
+        CACHE
+        PATH
+        "Directory to search for private OpenVR headers")
 
 set(_root_dirs)
 if(OPENVR_ROOT_DIR)
@@ -66,50 +65,49 @@ else()
     set(_libpath lib/${OPENVR_PLATFORM})
 endif()
 
+#set(CMAKE_FIND_DEBUG_MODE TRUE)
 
-# Check that the steamVR SDK is installed
-# (needed to prevent a segfault in OpenVR).
-set(STEAMVR_FOUND 1)
-if(CMAKE_HOST_UNIX)
-    find_file(OPENVRPATHS openvrpaths.vrpath PATHS $ENV{HOME}/.config/openvr "$ENV{HOME}/Library/Application Support/OpenVR/.openvr")
-    if(${OPENVRPATHS} MATCHES OPENVRPATHS-NOTFOUND)
-        set(STEAMVR_FOUND 0)
-    endif()
-endif()
-
-
-
+#lf: probably look for ovenvr/openvr_driver.h
 find_path(OPENVR_INCLUDE_DIR
-    NAMES
-    openvr/openvr_driver.h
-    HINTS
-    "${_libdir}"
-    "${_libdir}/.."
-    "${_libdir}/../.."
-    PATHS
-    ${_root_dirs}
-    PATH_SUFFIXES
-    headers
-    public/headers
-    steam
-    public/steam
-    )
+        NAMES
+        openvr/openvr_driver.h
+        HINTS
+        "${_libdir}"
+        "${_libdir}/.."
+        "${_libdir}/../.."
+        PATHS
+        ${_root_dirs}
+        PATH_SUFFIXES
+        headers
+        headers
+        public/headers
+        steam
+        public/steam)
+#set(CMAKE_FIND_DEBUG_MODE FALSE)
 
-FIND_LIBRARY(OPENVR_LIBRARY
-    NAMES openvr_api
-    HINTS
-    PATH_SUFFIXES ${_libpath}
-    PATHS ${OPENVR_ROOT_DIR}
-    )
+#message(${_root_dirs})
+#message(${OPENVR_INCLUDE_DIR})
+#set(OPENVR_INCLUDE_DIR "${OPENVR_INCLUDE_DIR}/..")
 
+
+FIND_LIBRARY(OPENVR_LIBRARY_TEMP
+        NAMES openvr_api
+        HINTS
+        PATH_SUFFIXES ${_libpath}
+        PATHS ${OPENVR_ROOT_DIR}
+)
+
+IF (OPENVR_LIBRARY_TEMP)
+    # Set the final string here so the GUI reflects the final state.
+    SET(OPENVR_LIBRARY ${OPENVR_LIBRARY_TEMP} CACHE STRING "Where the openvr Library can be found")
+    # Set the temp variable to INTERNAL so it is not seen in the CMake GUI
+    SET(OPENVR_LIBRARY_TEMP "${OPENVR_LIBRARY_TEMP}" CACHE INTERNAL "")
+ENDIF(OPENVR_LIBRARY_TEMP)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(OpenVR
-    DEFAULT_MSG
-    OPENVR_INCLUDE_DIR
-    OPENVR_LIBRARY
-    OPENVRPATHS
-    STEAMVR_FOUND)
+        DEFAULT_MSG
+        OPENVR_INCLUDE_DIR OPENVR_LIBRARY)
 
 if(OPENVR_FOUND)
     list(APPEND OPENVR_INCLUDE_DIRS ${OPENVR_INCLUDE_DIR})
