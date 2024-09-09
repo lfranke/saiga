@@ -7,9 +7,9 @@
 #pragma once
 #include "saiga/opengl/framebuffer.h"
 #include "saiga/opengl/query/gpuTimer.h"
+#include "saiga/opengl/rendering/deferredRendering/deferred_renderer.h"
 #include "saiga/opengl/rendering/deferredRendering/postProcessor.h"
 #include "saiga/opengl/rendering/forwardRendering/forward_renderer.h"
-#include "saiga/opengl/rendering/deferredRendering/deferred_renderer.h"
 #include "saiga/opengl/rendering/renderer.h"
 #include "saiga/opengl/vr/OpenvrWrapper.h"
 
@@ -35,6 +35,9 @@ class SAIGA_OPENGL_API VRRenderer : public DeferredRenderer
 
     OpenVRWrapper& VR() { return *vr; }
     std::shared_ptr<OpenVRWrapper> VR_ptr() { return vr; }
+
+    std::shared_ptr<Texture> get_Tex(const int eye) { return textures[eye]; }
+    Framebuffer& get_FBO(const int eye) { return framebuffers[eye]; }
 
    private:
     // for left and right eye

@@ -391,7 +391,7 @@ struct MultiScaleUnet2dParams : public ParamsBase
         SAIGA_PARAM(channels_last);
         SAIGA_PARAM(half_float);
 
-
+        SAIGA_PARAM(add_rgb);
         SAIGA_PARAM(sh_bands);
 
         SAIGA_PARAM(upsample_mode);
@@ -424,6 +424,8 @@ struct MultiScaleUnet2dParams : public ParamsBase
     std::string conv_block      = "gated";
     std::string conv_block_up   = "gated";
     std::string activation      = "elu";
+
+    bool add_rgb = false;
 
     // average, max
     std::string pooling = "average";
